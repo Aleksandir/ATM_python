@@ -23,7 +23,11 @@ class ATM:
         pass  # Implement card insertion logic
 
     def enter_pin(self):
-        pass  # Implement PIN entry logic
+        self.inc_count = 0
+        if pin == self.bank_account.pin:
+            return True
+        else:
+            return False
 
     def select_transaction(self):
         pass  # Implement transaction selection logic
@@ -38,4 +42,19 @@ class ATM:
 # Main program
 account = BankAccount("john", 1000, 123)  # Create a bank account with $1000
 atm = ATM(account)  # Insert the card into the ATM
-# Continue with the rest of the simulation
+
+while atm is not None:
+    atm.insert_card()
+
+    pin = input(f"hi {account.name}, please enter your pin: ")
+    inc_count = 0
+    while not atm.enter_pin(pin):
+        inc_count += 1
+        if inc_count == 3:
+            print("You have entered the wrong pin 3 times. Your card is shredded")
+            atm = None
+
+    atm.select_transaction()
+    atm.dispense_cash(100)
+    atm.eject_card()
+    atm = None  # Stop the program
