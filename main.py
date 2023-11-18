@@ -31,8 +31,18 @@ class ATM:
         else:
             return False
 
-    def select_transaction(self):
-        pass  # Implement transaction selection logic
+    def select_transaction(self, action):
+        match action:
+            case "withdraw":
+                return self.bank_account.withdraw()
+            case "deposit":
+                return self.bank_account.deposit()
+            case "check_balance":
+                return self.bank_account.check_balance()
+            case "cancel_transaction":
+                return "transaction cancelled"
+            case _:
+                return "invalid action"
 
     def dispense_cash(self, amount):
         self.bank_account.withdraw(amount)
@@ -43,11 +53,13 @@ class ATM:
 
 # Main program
 account = BankAccount("john", 1000, 123)  # Create a bank account with $1000
+print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)  # Insert the card into the ATM
 
 while atm is not None:
     atm.insert_card()
 
+    # Enter pin logic
     pin = input(f"hi {account.name}, please enter your pin: ")
     inc_count = 0
     while not atm.enter_pin(pin):
@@ -59,7 +71,15 @@ while atm is not None:
             break
         pin = input(f"hi {account.name}, please enter your pin: ")
 
-    atm.select_transaction()
+    # Select transaction logic
+    action = input(
+        "What would you like to do? (withdraw/deposit/check_balance/cancel_transaction): "
+    )
+    while atm.select_transaction(action) == "invalid action":
+        action = input("What would you like to do? (withdraw/deposit/check_balance): ")
+    if atm.select_transaction(action) == "transaction cancelled":
+        break
+
     atm.dispense_cash(100)
     atm.eject_card()
     atm = None  # Stop the program
