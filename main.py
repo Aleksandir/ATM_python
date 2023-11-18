@@ -22,6 +22,9 @@ class BankAccount:
         return self.balance
 
 
+# TODO refactor ATM class to take in file, and update file on exit
+# ATM should hold onto the file so it only has to read once, find the account and create an account class for it
+# research if we can save the file so it does not have to be read every time
 class ATM:
     def __init__(self, bank_account):
         self.bank_account = bank_account
