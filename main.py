@@ -25,8 +25,7 @@ class ATM:
         pass  # Implement card insertion logic
 
     def enter_pin(self, pin):
-        self.inc_count = 0
-        if pin == self.bank_account.pin:
+        if int(pin) == self.bank_account.pin:
             return True
         else:
             return False
@@ -57,19 +56,27 @@ print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)  # Insert the card into the ATM
 
 while atm is not None:
+    exit_flag = False
     atm.insert_card()
 
     # Enter pin logic
-    pin = input(f"hi {account.name}, please enter your pin: ")
     inc_count = 0
-    while not atm.enter_pin(pin):
-        if inc_count < 3:
+    while True:
+        pin = input(f"hi {account.name}, please enter your pin: ")
+        if atm.enter_pin(pin):
+            print("Pin accepted! \n")
+            break
+        else:
             inc_count += 1
             print("Incorrect pin. Please try again")
-        if inc_count == 3:
-            print("You have entered the wrong pin 3 times. Your card is shredded")
-            break
-        pin = input(f"hi {account.name}, please enter your pin: ")
+            if inc_count == 3:
+                print("You have entered the wrong pin 3 times. Your card is shredded")
+                exit_flag = True
+                break
+
+    # Exit the program if the card is shredded
+    if exit_flag:
+        break
 
     # Select transaction logic
     action = input(
