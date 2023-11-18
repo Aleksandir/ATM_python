@@ -64,7 +64,7 @@ with open("accounts.json", "r") as f:
 print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)
 
-print("Please insert your card")
+print("Please insert your card\n")
 
 inc_count = 0
 while True:
