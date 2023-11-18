@@ -34,13 +34,13 @@ class ATM:
 
     def select_transaction(self, action, amount=0):
         match action:
-            case "withdraw":
+            case "w":
                 return self.bank_account.withdraw(amount)
-            case "deposit":
+            case "d":
                 return self.bank_account.deposit()
-            case "check_balance":
+            case "c":
                 return self.bank_account.check_balance()
-            case "cancel_transaction":
+            case "q":
                 return "transaction cancelled"
             case _:
                 return "invalid action"
@@ -86,10 +86,10 @@ while atm is not None:
 
     # Select transaction logic
     action = input(
-        "What would you like to do? (withdraw/deposit/check_balance/cancel_transaction): "
+        "What would you like to do? (withdraw(w)/deposit(d)/check_balance(c)/cancel_transaction(q)): "
     )
     match action:
-        case "withdraw":
+        case "w":
             while True:
                 try:
                     amount = int(input("How much would you like to withdraw? "))
