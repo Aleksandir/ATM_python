@@ -1,3 +1,4 @@
+import json
 import sys
 
 
@@ -35,7 +36,23 @@ class ATM:
 # Main program
 # Create a bank account with $1000
 # Insert the card into the ATM
-account = BankAccount("john", 1000, 123)
+
+name = input("Please enter your name: ").lower()
+
+with open("accounts.json", "r") as f:
+    accounts = json.load(f)
+
+    account = None
+    for acc in accounts:
+        if acc["name"] == name:
+            account = BankAccount(name, acc["balance"], int(acc["pin"]))
+            break
+
+    if account is None:
+        print("Account not found")
+        sys.exit()
+
+print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)
 
 print("Please insert your card")
