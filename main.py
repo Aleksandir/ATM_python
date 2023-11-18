@@ -137,5 +137,5 @@ while True:
                 # for debugging purposes
                 print("Account not found.")
             # write the updated accounts list to the file
-            json.dump(accounts, f)
+            json.dump(accounts, f, indent=4)
         break
