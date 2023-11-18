@@ -1,5 +1,5 @@
 class BankAccount:
-    def __init__(self, balance=0):
+    def __init__(self, name, balance=0, pin=0):
         self.balance = balance
 
     def deposit(self, amount):
@@ -36,6 +36,6 @@ class ATM:
 
 
 # Main program
-account = BankAccount(1000)  # Create a bank account with $1000
+account = BankAccount("john", 1000, 123)  # Create a bank account with $1000
 atm = ATM(account)  # Insert the card into the ATM
 # Continue with the rest of the simulation
