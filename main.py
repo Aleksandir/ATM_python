@@ -50,8 +50,6 @@ class ATM:
 # Create a bank account with $1000
 # Insert the card into the ATM
 account = BankAccount("john", 1000, 123)
-# ! Debug info, remove later
-print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)
 
 print("Please insert your card")
