@@ -47,7 +47,16 @@ with open("accounts.json", "r") as f:
 
     if account is None:
         print("Account not found")
-        sys.exit()
+        new_account = input("Would you like to create a new account? (y/n) ").lower()
+        if new_account == "y":
+            pin = input("Please enter a pin: ")
+            account = BankAccount(name, 0, int(pin))
+            accounts.append(
+                {"name": name, "balance": account.balance, "pin": account.pin}
+            )
+            print("Account created!")
+        else:
+            sys.exit()
 
 print(f"debug info: {account.name} {account.balance} {account.pin}")
 atm = ATM(account)
@@ -56,10 +65,13 @@ print("Please insert your card")
 
 inc_count = 0
 while True:
-    pin = input(f"hi {atm.bank_account.name}, please enter your pin: ")
+    pin = input(f"hi {atm.bank_account.name}, please enter your pin (q to quit): ")
     if atm.enter_pin(pin):
         print("Pin accepted!")
         break
+    elif pin == "q":
+        print("Thank you for using our ATM")
+        sys.exit()
     else:
         inc_count += 1
         print("Incorrect pin. Please try again")
