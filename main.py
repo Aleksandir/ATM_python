@@ -10,8 +10,8 @@ class BankAccount:
     def withdraw(self, amount):
         if self.balance >= amount:
             self.balance -= amount
+            return True
         else:
-            print("Insufficient balance")
             return False
 
     def check_balance(self):
@@ -28,7 +28,7 @@ class ATM:
         while True:
             self.pin = input(f"hi {account.name}, please enter your pin: ")
             if atm.enter_pin(self.pin):
-                print("Pin accepted! \n")
+                print("Pin accepted!")
                 break
             else:
                 inc_count += 1
@@ -44,31 +44,6 @@ class ATM:
             return True
         else:
             return False
-
-    def select_transaction(self, action, amount=0):
-        match action:
-            case "w":
-                return self.bank_account.withdraw(amount)
-            case "d":
-                return self.bank_account.deposit()
-            case "c":
-                return self.bank_account.check_balance()
-            case "q":
-                return "transaction cancelled"
-            case _:
-                return "invalid action"
-
-    def dispense_cash(self, amount):
-        if self.bank_account.withdraw(amount) != False:
-            print(f"Please take your cash: {amount}")
-            print(f"Your new balance is: {self.bank_account.check_balance()}")
-        else:
-            print("Insufficient balance, transaction cancelled")
-
-    def eject_card(self):
-        print("Card ejected")
-        print("Thank you for using our ATM")
-        return True
 
 
 # Main program
@@ -93,8 +68,9 @@ while True:
 
     # Select transaction logic
     action = input(
-        "What would you like to do? (withdraw(w)/deposit(d)/check_balance(c)/cancel_transaction(q)): "
+        "\nWhat would you like to do? withdraw(w)/deposit(d)/check_balance(c)/quit and eject card(q): "
     )
+
     match action:
         case "w":
             while True:
@@ -104,25 +80,23 @@ while True:
                 except ValueError:
                     print("Please enter a valid amount")
                     # If the input is not valid, the loop will continue
-            atm.select_transaction(action, int(amount))
+            if atm.bank_account.withdraw(amount):
+                print(f"Please take your cash: ${amount}")
+                print(f"Your new balance is: ${atm.bank_account.check_balance()}")
+            else:
+                print(
+                    f"Insufficient funds, your current balance is: ${atm.bank_account.check_balance()}"
+                )
         case "d":
             pass
         case "c":
-            while True:
-                withdraw_value = input("How much would you like to withdraw? ")
-                if withdraw_value.isdigit():
-                    atm.dispense_cash(int(withdraw_value))
-                    break
-                else:
-                    print("Invalid input. Please enter a number.")
-
-    while atm.select_transaction(action) == "invalid action":
-        action = input("What would you like to do? (withdraw/deposit/check_balance): ")
-    if atm.select_transaction(action) == "transaction cancelled":
-        break
-
-    stop = input("Would you like to continue? (y/n): ")
-    if stop == "n":
-        exit_flag = atm.eject_card()
+            print(f"Your current balance is: ${atm.bank_account.check_balance()}")
+        case "q":
+            exit_flag = True
+            print("Thank you for using our ATM")
+            print("Please take your card")
+            break
+        case _:
+            print("Invalid choice")
     if exit_flag:
         break
