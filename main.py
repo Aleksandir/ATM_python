@@ -23,7 +23,21 @@ class ATM:
         self.bank_account = bank_account
 
     def insert_card(self):
-        pass  # Implement card insertion logic
+        inc_count = 0
+
+        while True:
+            self.pin = input(f"hi {account.name}, please enter your pin: ")
+            if atm.enter_pin(self.pin):
+                print("Pin accepted! \n")
+                break
+            else:
+                inc_count += 1
+                print("Incorrect pin. Please try again")
+                if inc_count == 3:
+                    print(
+                        "You have entered the wrong pin 3 times. Your card is shredded"
+                    )
+                    return True
 
     def enter_pin(self, pin):
         if int(pin) == self.bank_account.pin:
@@ -58,32 +72,24 @@ class ATM:
 
 
 # Main program
-account = BankAccount("john", 1000, 123)  # Create a bank account with $1000
+# Create a bank account with $1000
+# Insert the card into the ATM
+account = BankAccount("john", 1000, 123)
+# ! Debug info, remove later
 print(f"debug info: {account.name} {account.balance} {account.pin}")
-atm = ATM(account)  # Insert the card into the ATM
+atm = ATM(account)
 
-while atm is not None:
+print("Please insert your card")
+card_validated = atm.insert_card()
+
+# TODO - add card insertion logic
+# while not card_validated:
+#     print("Invalid card. Please insert your card again")
+#     card_validated = atm.insert_card()
+
+while True:
     exit_flag = False
-    atm.insert_card()
-
-    # Enter pin logic
-    inc_count = 0
-    while True:
-        pin = input(f"hi {account.name}, please enter your pin: ")
-        if atm.enter_pin(pin):
-            print("Pin accepted! \n")
-            break
-        else:
-            inc_count += 1
-            print("Incorrect pin. Please try again")
-            if inc_count == 3:
-                print("You have entered the wrong pin 3 times. Your card is shredded")
-                exit_flag = True
-                break
-
-    # Exit the program if the card is shredded
-    if exit_flag:
-        break
+    # Rest of your code
 
     # Select transaction logic
     action = input(
@@ -99,13 +105,22 @@ while atm is not None:
                     print("Please enter a valid amount")
                     # If the input is not valid, the loop will continue
             atm.select_transaction(action, int(amount))
+        case "d":
+            pass
+        case "c":
+            while True:
+                withdraw_value = input("How much would you like to withdraw? ")
+                if withdraw_value.isdigit():
+                    atm.dispense_cash(int(withdraw_value))
+                    break
+                else:
+                    print("Invalid input. Please enter a number.")
 
     while atm.select_transaction(action) == "invalid action":
         action = input("What would you like to do? (withdraw/deposit/check_balance): ")
     if atm.select_transaction(action) == "transaction cancelled":
         break
 
-    atm.dispense_cash(100)
     stop = input("Would you like to continue? (y/n): ")
     if stop == "n":
         exit_flag = atm.eject_card()
