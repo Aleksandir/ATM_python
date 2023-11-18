@@ -73,6 +73,7 @@ while True:
 
     match action:
         case "w":
+            # withdraw
             while True:
                 try:
                     amount = int(input("How much would you like to withdraw? "))
@@ -88,6 +89,7 @@ while True:
                     f"Insufficient funds, your current balance is: ${atm.bank_account.check_balance()}"
                 )
         case "d":
+            # deposit
             while True:
                 try:
                     amount = int(input("How much would you like to deposit? "))
@@ -99,8 +101,10 @@ while True:
             print(f"We have now deposited ${amount} into your account")
             print(f"Your new balance is: ${atm.bank_account.check_balance()}")
         case "c":
+            # check balance
             print(f"Your current balance is: ${atm.bank_account.check_balance()}")
         case "q":
+            # quit and eject card
             exit_flag = True
             print("Thank you for using our ATM")
             print("Please take your card")
