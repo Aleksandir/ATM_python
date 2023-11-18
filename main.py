@@ -116,8 +116,17 @@ while True:
             exit_flag = True
             print("Thank you for using our ATM")
             print("Please take your card")
-            break
         case _:
             print("Invalid choice")
     if exit_flag:
+        with open("accounts.json", "w") as f:
+            for acc in accounts:
+                if acc["name"] == name:
+                    acc["balance"] = atm.bank_account.balance
+                    break
+            else:
+                # for debugging purposes
+                print("Account not found.")
+            # write the updated accounts list to the file
+            json.dump(accounts, f)
         break
