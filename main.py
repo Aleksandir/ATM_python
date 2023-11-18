@@ -1,3 +1,6 @@
+import sys
+
+
 class BankAccount:
     def __init__(self, name, balance=0, pin=0):
         self.balance = balance
@@ -22,23 +25,6 @@ class ATM:
     def __init__(self, bank_account):
         self.bank_account = bank_account
 
-    def insert_card(self):
-        inc_count = 0
-
-        while True:
-            self.pin = input(f"hi {account.name}, please enter your pin: ")
-            if atm.enter_pin(self.pin):
-                print("Pin accepted!")
-                break
-            else:
-                inc_count += 1
-                print("Incorrect pin. Please try again")
-                if inc_count == 3:
-                    print(
-                        "You have entered the wrong pin 3 times. Your card is shredded"
-                    )
-                    return True
-
     def enter_pin(self, pin):
         if int(pin) == self.bank_account.pin:
             return True
@@ -53,12 +39,19 @@ account = BankAccount("john", 1000, 123)
 atm = ATM(account)
 
 print("Please insert your card")
-card_validated = atm.insert_card()
 
-# TODO - add card insertion logic
-# while not card_validated:
-#     print("Invalid card. Please insert your card again")
-#     card_validated = atm.insert_card()
+inc_count = 0
+while True:
+    pin = input(f"hi {atm.bank_account.name}, please enter your pin: ")
+    if atm.enter_pin(pin):
+        print("Pin accepted!")
+        break
+    else:
+        inc_count += 1
+        print("Incorrect pin. Please try again")
+        if inc_count == 3:
+            print("You have entered the wrong pin 3 times. Your card is shredded")
+            sys.exit()
 
 while True:
     exit_flag = False
