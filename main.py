@@ -55,7 +55,7 @@ with open("accounts.json", "r") as f:
             pin = input("Please enter a pin: ")
             account = BankAccount(name, 0, int(pin))
             accounts.append(
-                {"name": name, "balance": account.balance, "pin": account.pin}
+                {"name": name, "balance": account.balance, "pin": str(account.pin)}
             )
             print("Account created!")
         else:
