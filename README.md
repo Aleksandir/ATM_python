@@ -12,7 +12,7 @@ The program consists of two main classes:
 
 ## Usage
 
-To use this program, create instances of the `BankAccount` and `ATM` classes and simulate transactions.
+To use this program, create instances of the `BankAccount` and `ATM` classes and simulate transactions. The main program in [main.py](main.py) demonstrates how to use these classes. It creates a `BankAccount` instance, inserts the card into the `ATM`, and then enters a loop where the user can enter their pin, select a transaction (withdraw, deposit, check balance), and quit the program.
 
 ## Future Improvements
 
