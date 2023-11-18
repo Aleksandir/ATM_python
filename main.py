@@ -68,7 +68,9 @@ print("Please insert your card\n")
 
 inc_count = 0
 while True:
-    pin = input(f"hi {atm.bank_account.name}, please enter your pin (q to quit): ")
+    pin = input(
+        f"hi {atm.bank_account.name.capitalize()}, please enter your pin (q to quit): "
+    )
     if atm.enter_pin(pin):
         print("Pin accepted!")
         break
@@ -88,8 +90,14 @@ while True:
 
     # Select transaction logic
     action = input(
-        "\nWhat would you like to do? withdraw(w)/deposit(d)/check_balance(c)/quit and eject card(q): "
-    )
+        """
+Please select a transaction:
+w - withdraw
+d - deposit
+c - check_balance
+q - quit and eject card
+=> """
+    ).lower()
 
     match action:
         case "w":
