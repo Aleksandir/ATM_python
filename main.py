@@ -10,7 +10,6 @@ class BankAccount:
     def withdraw(self, amount):
         if self.balance >= amount:
             self.balance -= amount
-            return amount
         else:
             print("Insufficient balance")
             return False
@@ -48,7 +47,7 @@ class ATM:
     def dispense_cash(self, amount):
         if self.bank_account.withdraw(amount) != False:
             print(f"Please take your cash: {amount}")
-            print(f"Your new balance is: {self.bank_account.balance}")
+            print(f"Your new balance is: {self.bank_account.check_balance()}")
         else:
             print("Insufficient balance, transaction cancelled")
 
