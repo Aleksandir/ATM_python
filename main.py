@@ -88,7 +88,16 @@ while True:
                     f"Insufficient funds, your current balance is: ${atm.bank_account.check_balance()}"
                 )
         case "d":
-            pass
+            while True:
+                try:
+                    amount = int(input("How much would you like to deposit? "))
+                    break  # If the input is valid, break the loop
+                except ValueError:
+                    print("Please enter a valid amount")
+                    # If the input is not valid, the loop will continue
+            atm.bank_account.deposit(amount)
+            print(f"We have now deposited ${amount} into your account")
+            print(f"Your new balance is: ${atm.bank_account.check_balance()}")
         case "c":
             print(f"Your current balance is: ${atm.bank_account.check_balance()}")
         case "q":
