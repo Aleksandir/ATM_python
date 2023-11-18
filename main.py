@@ -52,7 +52,9 @@ class ATM:
             print("Insufficient balance, transaction cancelled")
 
     def eject_card(self):
-        pass  # Implement card ejection logic
+        print("Card ejected")
+        print("Thank you for using our ATM")
+        return True
 
 
 # Main program
@@ -104,5 +106,8 @@ while atm is not None:
         break
 
     atm.dispense_cash(100)
-    atm.eject_card()
-    atm = None  # Stop the program
+    stop = input("Would you like to continue? (y/n): ")
+    if stop == "n":
+        exit_flag = atm.eject_card()
+    if exit_flag:
+        break
