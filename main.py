@@ -10,8 +10,10 @@ class BankAccount:
     def withdraw(self, amount):
         if self.balance >= amount:
             self.balance -= amount
+            return amount
         else:
             print("Insufficient balance")
+            return False
 
     def check_balance(self):
         return self.balance
@@ -30,10 +32,10 @@ class ATM:
         else:
             return False
 
-    def select_transaction(self, action):
+    def select_transaction(self, action, amount=0):
         match action:
             case "withdraw":
-                return self.bank_account.withdraw()
+                return self.bank_account.withdraw(amount)
             case "deposit":
                 return self.bank_account.deposit()
             case "check_balance":
@@ -44,7 +46,11 @@ class ATM:
                 return "invalid action"
 
     def dispense_cash(self, amount):
-        self.bank_account.withdraw(amount)
+        if self.bank_account.withdraw(amount) != False:
+            print(f"Please take your cash: {amount}")
+            print(f"Your new balance is: {self.bank_account.balance}")
+        else:
+            print("Insufficient balance, transaction cancelled")
 
     def eject_card(self):
         pass  # Implement card ejection logic
@@ -82,6 +88,17 @@ while atm is not None:
     action = input(
         "What would you like to do? (withdraw/deposit/check_balance/cancel_transaction): "
     )
+    match action:
+        case "withdraw":
+            while True:
+                try:
+                    amount = int(input("How much would you like to withdraw? "))
+                    break  # If the input is valid, break the loop
+                except ValueError:
+                    print("Please enter a valid amount")
+                    # If the input is not valid, the loop will continue
+            atm.select_transaction(action, int(amount))
+
     while atm.select_transaction(action) == "invalid action":
         action = input("What would you like to do? (withdraw/deposit/check_balance): ")
     if atm.select_transaction(action) == "transaction cancelled":
