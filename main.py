@@ -34,9 +34,6 @@ class ATM:
 
 
 # Main program
-# Create a bank account with $1000
-# Insert the card into the ATM
-
 name = input("Please enter your name: ").lower()
 
 with open("accounts.json", "r") as f:
