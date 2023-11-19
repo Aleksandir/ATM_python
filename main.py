@@ -21,59 +21,63 @@ class BankAccount:
     def check_balance(self):
         return self.balance
 
+    def enter_pin(self, pin):
+        return self.pin == pin
+
 
 # TODO refactor ATM class to take in file, and update file on exit
 # ATM should hold onto the file so it only has to read once, find the account and create an account class for it
 # research if we can save the file so it does not have to be read every time
-class ATM:
-    def __init__(self, bank_account):
-        self.bank_account = bank_account
-
-    def enter_pin(self, pin):
-        if int(pin) == self.bank_account.pin:
-            return True
-        else:
-            return False
 
 
 # Main program
-name = input("Please enter your name: ").lower()
+def account_management():
+    inc_count = 0
+    atm = None
 
-with open("accounts.json", "r") as f:
-    accounts = json.load(f)
+    name = input("\nPlease enter your name: ").lower()
 
-    account = None
-    for acc in accounts:
-        if acc["name"] == name:
-            account = BankAccount(name, acc["balance"], int(acc["pin"]))
-            break
+    with open("accounts.json", "r") as f:
+        accounts = json.load(f)
 
-    if account is None:
-        print("Account not found")
-        new_account = input("Would you like to create a new account? (y/n) ").lower()
-        if new_account == "y":
-            pin = input("Please enter a pin: ")
-            account = BankAccount(name, 0, int(pin))
-            accounts.append(
-                {"name": name, "balance": account.balance, "pin": str(account.pin)}
-            )
-            print("Account created!")
-        else:
-            sys.exit()
+        for acc in accounts:
+            if acc["name"] == name:
+                atm = BankAccount(name, acc["balance"], int(acc["pin"]))
+                break
 
-print(f"debug info: {account.name} {account.balance} {account.pin}")
-atm = ATM(account)
+        if atm is None:
+            print("Account not found")
+            new_account = input(
+                "Would you like to create a new account? (y/n) "
+            ).lower()
+            if new_account == "y":
+                pin = input("Please enter a pin: ")
+                atm = BankAccount(name, 0, int(pin))
+                accounts.append(
+                    {"name": name, "balance": atm.balance, "pin": str(atm.pin)}
+                )
+                print("Account created!")
+            else:
+                sys.exit()
 
-print("Please insert your card\n")
+    print(f"debug info: {atm.name} {atm.balance} {atm.pin}")
 
-inc_count = 0
-while True:
+    print("Please insert your card\n")
+
     pin = input(
-        f"hi {atm.bank_account.name.capitalize()}, please enter your pin (q to quit): "
+        f"Hi {atm.name.capitalize()}, please enter your pin, 'e' to eject card or 'q' to quit: "
     )
     if atm.enter_pin(pin):
         print("Pin accepted!")
-        break
+
+    elif pin == "e":
+        new_account = input("Would you like to create a new account? (y/n) ").lower()
+        if new_account == "y":
+            pin = input("Please enter a pin: ")
+            atm = BankAccount(name, 0, int(pin))
+            accounts.append({"name": name, "balance": atm.balance, "pin": str(atm.pin)})
+            print("Account created!")
+
     elif pin == "q":
         print("Thank you for using our ATM")
         sys.exit()
@@ -84,7 +88,12 @@ while True:
             print("You have entered the wrong pin 3 times. Your card is shredded")
             sys.exit()
 
+    return atm, accounts, name
+
+
 while True:
+    atm, accounts, name = account_management()
+
     exit_flag = False
     # Rest of your code
 
@@ -95,7 +104,7 @@ Please select a transaction:
 w - withdraw
 d - deposit
 c - check_balance
-q - quit and eject card
+e - eject card
 => """
     ).lower()
 
@@ -109,12 +118,12 @@ q - quit and eject card
                 except ValueError:
                     print("Please enter a valid amount")
                     # If the input is not valid, the loop will continue
-            if atm.bank_account.withdraw(amount):
+            if atm.withdraw(amount):
                 print(f"Please take your cash: ${amount}")
-                print(f"Your new balance is: ${atm.bank_account.check_balance()}")
+                print(f"Your new balance is: ${atm.check_balance()}")
             else:
                 print(
-                    f"Insufficient funds, your current balance is: ${atm.bank_account.check_balance()}"
+                    f"Insufficient funds, your current balance is: ${atm.check_balance()}"
                 )
         case "d":
             # deposit
@@ -125,24 +134,24 @@ q - quit and eject card
                 except ValueError:
                     print("Please enter a valid amount")
                     # If the input is not valid, the loop will continue
-            atm.bank_account.deposit(amount)
+            atm.deposit(amount)
             print(f"We have now deposited ${amount} into your account")
-            print(f"Your new balance is: ${atm.bank_account.check_balance()}")
+            print(f"Your new balance is: ${atm.check_balance()}")
         case "c":
             # check balance
-            print(f"Your current balance is: ${atm.bank_account.check_balance()}")
-        case "q":
+            print(f"Your current balance is: ${atm.check_balance()}")
+        case "e":
             # quit and eject card
-            exit_flag = True
             print("Thank you for using our ATM")
             print("Please take your card")
+            atm, accounts, name = account_management()
         case _:
             print("Invalid choice")
     if exit_flag:
         with open("accounts.json", "w") as f:
             for acc in accounts:
                 if acc["name"] == name:
-                    acc["balance"] = atm.bank_account.balance
+                    acc["balance"] = atm.balance
                     break
             else:
                 # for debugging purposes
